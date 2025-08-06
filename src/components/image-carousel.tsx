@@ -50,9 +50,11 @@ const CarouselTrack = styled(Box, {
 })<{ currentIndex: number; isTransitioning: boolean; dragOffset: number }>(
   ({ currentIndex, isTransitioning, dragOffset }) => ({
     display: "flex",
-    transition: isTransitioning ? "transform 0.5s ease" : "none",
-    transform: `translateX(-${currentIndex * 180 - dragOffset}px)`,
+    transition: isTransitioning ? "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+    transform: `translate3d(-${currentIndex * 180 - dragOffset}px, 0, 0)`,
     userSelect: "none",
+    willChange: "transform",
+    backfaceVisibility: "hidden",
   })
 );
 
@@ -77,6 +79,9 @@ const StyledImage = styled("img")({
   width: "100%",
   height: "100%",
   objectFit: "cover",
+  willChange: "transform",
+  backfaceVisibility: "hidden",
+  transform: "translateZ(0)",
 });
 
 const NavButton = styled(IconButton)({
@@ -128,15 +133,15 @@ export interface ImageCarouselProps {
 
 export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   images = [
-    "/images/carousel-images/IMG_0788.jpg",
-    "/images/carousel-images/IMG_0800.jpg",
-    "/images/carousel-images/IMG_0808.jpg",
-    "/images/carousel-images/IMG_0816.jpg",
-    "/images/carousel-images/IMG_0829.jpg",
-    "/images/carousel-images/IMG_0833.jpg",
-    "/images/carousel-images/IMG_0844.jpg",
-    "/images/carousel-images/IMG_0847.jpg",
-    "/images/carousel-images/IMG_0875.jpg",
+    "/images/carousel-images-optimized/IMG_0788.jpg",
+    "/images/carousel-images-optimized/IMG_0800.jpg",
+    "/images/carousel-images-optimized/IMG_0808.jpg",
+    "/images/carousel-images-optimized/IMG_0816.jpg",
+    "/images/carousel-images-optimized/IMG_0829.jpg",
+    "/images/carousel-images-optimized/IMG_0833.jpg",
+    "/images/carousel-images-optimized/IMG_0844.jpg",
+    "/images/carousel-images-optimized/IMG_0847.jpg",
+    "/images/carousel-images-optimized/IMG_0875.jpg",
   ],
 }) => {
   const [currentIndex, setCurrentIndex] = useState(images.length); // Start from the first duplicated set
@@ -157,10 +162,18 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => prevIndex + 1);
-    }, 3000); // Rotate every 3 seconds
+    }, 4000); // Rotate every 4 seconds for better UX
 
     return () => clearInterval(interval);
   }, [isDragging]);
+
+  // Preload images for better performance
+  useEffect(() => {
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [images]);
 
   // Handle infinite loop transitions
   useEffect(() => {
