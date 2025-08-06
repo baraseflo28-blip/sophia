@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider, createTheme, CssBaseline, Theme } from "@mui/material";
+import "../lib/i18n"; // Initialize i18n in client component
 
 interface ClientLayoutProps {
   children: React.ReactNode;
