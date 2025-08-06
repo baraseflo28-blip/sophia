@@ -21,37 +21,37 @@ export default function Home() {
 
   const socialLinks = [
     {
-      iconImage: "/icons/whatsapp.png",
+      iconImage: "/Icons/whatsapp.png",
       label: t("links.whatsapp"),
       url: "https://google.com",
     },
     {
-      iconImage: "/icons/telegram.png",
+      iconImage: "/Icons/telegram.png",
       label: t("links.telegram"),
       url: "https://google.com",
     },
     {
-      iconImage: "/icons/instagram.png",
+      iconImage: "/Icons/instagram.png",
       label: t("links.instagram"),
       url: "https://google.com",
     },
     {
-      iconImage: "/icons/tik-tok.png",
+      iconImage: "/Icons/tik-tok.png",
       label: t("links.tiktok"),
       url: "https://google.com",
     },
     {
-      iconImage: "/icons/facebook.png",
+      iconImage: "/Icons/facebook.png",
       label: t("links.facebook"),
       url: "https://google.com",
     },
     {
-      iconImage: "/icons/google-maps.png",
+      iconImage: "/Icons/google-maps.png",
       label: t("links.google_location"),
       url: "https://google.com",
     },
     {
-      iconImage: "/icons/download.png",
+      iconImage: "/Icons/download.png",
       label: t("links.save_add_kaydet"),
       url: "https://google.com",
     },
