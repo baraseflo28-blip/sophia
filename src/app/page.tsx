@@ -3,6 +3,7 @@
 import React from "react";
 import { Box, Container, Typography, Avatar } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
 import {
   FaWhatsapp,
   FaTelegram,
@@ -77,15 +78,23 @@ export default function Home() {
         }}
       >
         {/* Logo and Brand Section */}
-        <Box
-          sx={{
-            textAlign: "center",
-            mb: { xs: 2, sm: 3, md: 3 },
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+        <motion.div
+          initial={{ opacity: 0, y: -30, scale: 0.8 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            duration: 0.8,
+            ease: [0.25, 0.25, 0, 1]
           }}
         >
+          <Box
+            sx={{
+              textAlign: "center",
+              mb: { xs: 2, sm: 3, md: 3 },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
           <Box
             component="img"
             src="/images/logo.png"
@@ -164,6 +173,7 @@ export default function Home() {
             {t("brand.subtitle2")}
           </Typography>
         </Box>
+        </motion.div>
 
         {/* Social Links Section */}
         <Box
@@ -182,6 +192,7 @@ export default function Home() {
               iconImage={link.iconImage}
               label={link.label}
               url={link.url}
+              index={index}
             />
           ))}
         </Box>
@@ -231,9 +242,18 @@ export default function Home() {
         </Box>
 
         {/* Image Carousel Section */}
-        <Box sx={{ width: "100%", maxWidth: "700px" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            duration: 0.6,
+            delay: (socialLinks.length * 0.1) + 0.3, // After all social links
+            ease: [0.25, 0.25, 0, 1]
+          }}
+          style={{ width: "100%", maxWidth: "700px" }}
+        >
           <ImageCarousel />
-        </Box>
+        </motion.div>
       </Box>
     </>
   );
