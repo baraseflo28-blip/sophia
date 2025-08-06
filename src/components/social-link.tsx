@@ -45,6 +45,8 @@ export interface SocialLinkProps {
   url: string;
   iconImage?: string;
   index?: number; // For staggered animations
+  onClick?: () => void; // Custom click handler
+  isSaveButton?: boolean; // Special handling for save button
 }
 
 export const SocialLink: React.FC<SocialLinkProps> = ({
@@ -53,9 +55,30 @@ export const SocialLink: React.FC<SocialLinkProps> = ({
   url,
   iconImage,
   index = 0,
+  onClick,
+  isSaveButton = false,
 }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
+  const linkProps = isSaveButton || onClick 
+    ? { 
+        href: "#", 
+        onClick: handleClick,
+        style: { textDecoration: 'none', color: 'inherit' }
+      }
+    : { 
+        href: url, 
+        target: "_blank", 
+        rel: "noopener noreferrer" 
+      };
+
   return (
-    <Link href={url} underline="none" target="_blank" rel="noopener noreferrer">
+    <Link {...linkProps} underline="none">
       <StyledLinkCard
         initial={{ 
           opacity: 0, 

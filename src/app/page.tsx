@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Container, Typography, Avatar } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { savePageLocally, addKeyboardShortcuts } from "@/lib/save-page";
 import {
   FaWhatsapp,
   FaTelegram,
@@ -20,7 +21,19 @@ import { SocialLink, ImageCarousel, BackgroundVideo } from "@/components";
 export default function Home() {
   const { t } = useTranslation();
 
-  const socialLinks = [
+  // Add keyboard shortcuts for save functionality
+  useEffect(() => {
+    const cleanup = addKeyboardShortcuts();
+    return cleanup; // Cleanup on component unmount
+  }, []);
+
+  const socialLinks: Array<{
+    iconImage: string;
+    label: string;
+    url: string;
+    onClick?: () => void;
+    isSaveButton?: boolean;
+  }> = [
     {
       iconImage: "/Icons/whatsapp.png",
       label: t("links.whatsapp"),
@@ -54,7 +67,9 @@ export default function Home() {
     {
       iconImage: "/Icons/download.png",
       label: t("links.save_add_kaydet"),
-      url: "https://google.com",
+      url: "#",
+      isSaveButton: true,
+      onClick: savePageLocally,
     },
   ];
 
@@ -193,6 +208,8 @@ export default function Home() {
               label={link.label}
               url={link.url}
               index={index}
+              onClick={link.onClick}
+              isSaveButton={link.isSaveButton}
             />
           ))}
         </Box>
