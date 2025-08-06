@@ -155,7 +155,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
     "/images/carousel-images-optimized/IMG_0875.jpg",
   ],
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(images.length); // Start from the first duplicated set
+  const [currentIndex, setCurrentIndex] = useState(images.length + Math.floor(images.length / 2)); // Start from the middle image
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
