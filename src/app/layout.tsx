@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import ClientLayout from "./client-layout";
 import "./globals.css";
 
@@ -43,24 +42,14 @@ export const metadata: Metadata = {
     icon: "/images/logo.png",
     apple: "/images/logo.png",
   },
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#000000",
 };
 
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: {
-      main: "#ffffff",
-    },
-    background: {
-      default: "transparent",
-    },
-  },
-  typography: {
-    fontFamily: "var(--font-geist-sans)",
-  },
-});
+// Create viewport export for Next.js 15 compatibility
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#000000",
+};
 
 export default function RootLayout({
   children,
@@ -70,7 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ClientLayout theme={theme}>
+        <ClientLayout>
           {children}
         </ClientLayout>
       </body>
