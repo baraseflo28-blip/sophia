@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Container, Typography, Avatar } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -19,7 +19,12 @@ import { MdVerified } from "react-icons/md";
 import { SocialLink, ImageCarousel, BackgroundVideo } from "@/components";
 
 export default function Home() {
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Add keyboard shortcuts for save functionality
   useEffect(() => {
@@ -27,51 +32,50 @@ export default function Home() {
     return cleanup; // Cleanup on component unmount
   }, []);
 
-  const socialLinks: Array<{
-    iconImage: string;
-    label: string;
-    url: string;
-    onClick?: () => void;
-    isSaveButton?: boolean;
-  }> = [
-    {
-      iconImage: "/Icons/whatsapp.png",
-      label: t("links.whatsapp"),
-      url: "https://google.com",
-    },
-    {
-      iconImage: "/Icons/telegram.png",
-      label: t("links.telegram"),
-      url: "https://google.com",
-    },
-    {
-      iconImage: "/Icons/instagram.png",
-      label: t("links.instagram"),
-      url: "https://google.com",
-    },
-    {
-      iconImage: "/Icons/tik-tok.png",
-      label: t("links.tiktok"),
-      url: "https://google.com",
-    },
-    {
-      iconImage: "/Icons/facebook.png",
-      label: t("links.facebook"),
-      url: "https://google.com",
-    },
-    {
-      iconImage: "/Icons/google-maps.png",
-      label: t("links.google_location"),
-      url: "https://google.com",
-    },
-    {
-      iconImage: "/Icons/download.png",
-      label: t("links.save_add_kaydet"),
-      url: "#",
-      isSaveButton: true,
-      onClick: savePageLocally,
-    },
-  ];
+  const getSocialLinks = () => {
+    const useTranslations = isClient && ready;
+    return [
+      {
+        iconImage: "/Icons/whatsapp.png",
+        label: useTranslations ? t("links.whatsapp") : "WhatsApp واتساب",
+        url: "https://google.com",
+      },
+      {
+        iconImage: "/Icons/telegram.png",
+        label: useTranslations ? t("links.telegram") : "Telegram تلغرام",
+        url: "https://google.com",
+      },
+      {
+        iconImage: "/Icons/instagram.png",
+        label: useTranslations ? t("links.instagram") : "Instagram انستاقرام",
+        url: "https://google.com",
+      },
+      {
+        iconImage: "/Icons/tik-tok.png",
+        label: useTranslations ? t("links.tiktok") : "Tiktok تيك توك",
+        url: "https://google.com",
+      },
+      {
+        iconImage: "/Icons/facebook.png",
+        label: useTranslations ? t("links.facebook") : "Facebook فيس بوك",
+        url: "https://google.com",
+      },
+      {
+        iconImage: "/Icons/google-maps.png",
+        label: useTranslations ? t("links.google_location") : "Google Location مواقع غوغل",
+        url: "https://google.com",
+      },
+      {
+        iconImage: "/Icons/download.png",
+        label: useTranslations ? t("links.save_add_kaydet") : "Save  حفظ",
+        url: "#",
+        isSaveButton: true,
+        onClick: savePageLocally,
+      },
+    ];
+  };
+
+  const socialLinks = getSocialLinks();
 
   return (
     <>
@@ -147,7 +151,7 @@ export default function Home() {
                 textAlign: "center",
               }}
             >
-              {t("brand.name")}
+              {isClient && ready ? t("brand.name") : "Sophia Fashion"}
             </Typography>
             <MdVerified
               size={28}
@@ -171,7 +175,7 @@ export default function Home() {
               textAlign: "center",
             }}
           >
-            {t("brand.subtitle")}
+            {isClient && ready ? t("brand.subtitle") : "أبدعنا في إسطنبول"}
           </Typography>
           <Typography
             variant="h5"
@@ -185,7 +189,7 @@ export default function Home() {
               textAlign: "center",
             }}
           >
-            {t("brand.subtitle2")}
+            {isClient && ready ? t("brand.subtitle2") : "والان بداية جديدة من حلب"}
           </Typography>
         </Box>
         </motion.div>
