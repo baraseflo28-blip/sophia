@@ -84,19 +84,30 @@ const StyledImage = styled("img")({
   transform: "translateZ(0)",
 });
 
-const NavButton = styled(IconButton)({
+const NavButton = styled(IconButton)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   transform: "translateY(-50%)",
   backgroundColor: "rgba(255, 255, 255, 0.8)",
   color: "#333",
-  width: "40px",
-  height: "40px",
+  width: "44px",
+  height: "44px",
+  minWidth: "44px", // Ensure minimum touch target size
+  touchAction: "manipulation", // Improve touch responsiveness
   "&:hover": {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
   },
-  zIndex: 2,
-});
+  "&:active": {
+    backgroundColor: "rgba(255, 255, 255, 1)",
+    transform: "translateY(-50%) scale(0.95)",
+  },
+  zIndex: 10, // Higher z-index to ensure buttons are clickable
+  [theme.breakpoints.down('md')]: {
+    width: "48px",
+    height: "48px",
+    minWidth: "48px", // Larger on mobile for better touch experience
+  },
+}));
 
 const LeftButton = styled(NavButton)({
   left: "10px",
@@ -194,11 +205,19 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
     }
   }, [currentIndex, images.length]);
 
-  const goToPrevious = () => {
+  const goToPrevious = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     setCurrentIndex(currentIndex - 1);
   };
 
-  const goToNext = () => {
+  const goToNext = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     setCurrentIndex(currentIndex + 1);
   };
 
@@ -242,6 +261,11 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
   // Mouse events
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Only handle mouse down if not clicking on buttons
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('[role="button"]')) {
+      return;
+    }
     e.preventDefault();
     handleStart(e.clientX);
   };
@@ -262,17 +286,22 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
   // Touch events
   const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevent default touch behaviors
+    // Only handle touch if not clicking on buttons
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('[role="button"]')) {
+      return;
+    }
     handleStart(e.touches[0].clientX);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevent default touch behaviors
+    if (!isDragging) return;
+    e.preventDefault(); // Only prevent default when actually dragging
     handleMove(e.touches[0].clientX);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevent default touch behaviors
+    if (!isDragging) return;
     handleEnd();
   };
 
@@ -306,10 +335,26 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         </CarouselTrack>
 
         {/* Navigation Buttons */}
-        <LeftButton onClick={goToPrevious}>
+        <LeftButton 
+          onClick={goToPrevious}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            goToPrevious(e);
+          }}
+          role="button"
+          aria-label="Previous image"
+        >
           <FaChevronLeft size={16} />
         </LeftButton>
-        <RightButton onClick={goToNext}>
+        <RightButton 
+          onClick={goToNext}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            goToNext(e);
+          }}
+          role="button"
+          aria-label="Next image"
+        >
           <FaChevronRight size={16} />
         </RightButton>
       </CarouselContainer>
