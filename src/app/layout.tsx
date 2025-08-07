@@ -96,33 +96,33 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/favicon.ico",
+        url: "/favicon.ico?v=2",
         sizes: "any",
         type: "image/x-icon",
       },
       {
-        url: "/icon-192.png",
+        url: "/icon-192.png?v=2",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        url: "/icon-512.png",
+        url: "/icon-512.png?v=2",
         sizes: "512x512",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url: "/images/logo.png",
+        url: "/images/logo.png?v=2",
         sizes: "180x180",
         type: "image/png",
       },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: "/favicon.ico?v=2",
     other: [
       {
         rel: "icon",
-        url: "/favicon.ico",
+        url: "/favicon.ico?v=2",
         type: "image/x-icon",
       },
     ],
@@ -181,11 +181,21 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
         {/* Explicit favicon links for maximum browser compatibility */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
-        <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
-        <link rel="apple-touch-icon" href="/images/logo.png" sizes="180x180" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+        <link
+          rel="icon"
+          href="/icon-192.png?v=2"
+          type="image/png"
+          sizes="192x192"
+        />
+        <link
+          rel="icon"
+          href="/icon-512.png?v=2"
+          type="image/png"
+          sizes="512x512"
+        />
+        <link rel="apple-touch-icon" href="/images/logo.png?v=2" sizes="180x180" />
+        <link rel="shortcut icon" href="/favicon.ico?v=2" />
 
         {/* Preload critical resources */}
         <link
