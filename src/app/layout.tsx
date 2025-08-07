@@ -96,33 +96,33 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/favicon.ico?v=2",
+        url: "/favicon.ico?v=3",
         sizes: "any",
         type: "image/x-icon",
       },
       {
-        url: "/icon-192.png?v=2",
+        url: "/icon-192.png?v=3",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        url: "/icon-512.png?v=2",
+        url: "/icon-512.png?v=3",
         sizes: "512x512",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url: "/images/logo.png?v=2",
+        url: "/images/logo.png?v=3",
         sizes: "180x180",
         type: "image/png",
       },
     ],
-    shortcut: "/favicon.ico?v=2",
+    shortcut: "/favicon.ico?v=3",
     other: [
       {
         rel: "icon",
-        url: "/favicon.ico?v=2",
+        url: "/favicon.ico?v=3",
         type: "image/x-icon",
       },
     ],
@@ -180,26 +180,28 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-        {/* Explicit favicon links for maximum browser compatibility */}
-        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+        {/* Web App Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Aggressive favicon links for desktop browser compatibility */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=3" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=3" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.ico?v=3" />
         <link
           rel="icon"
-          href="/icon-192.png?v=2"
+          href="/icon-192.png?v=3"
           type="image/png"
           sizes="192x192"
         />
         <link
           rel="icon"
-          href="/icon-512.png?v=2"
+          href="/icon-512.png?v=3"
           type="image/png"
           sizes="512x512"
         />
-        <link
-          rel="apple-touch-icon"
-          href="/images/logo.png?v=2"
-          sizes="180x180"
-        />
-        <link rel="shortcut icon" href="/favicon.ico?v=2" />
+        <link rel="apple-touch-icon" href="/images/logo.png?v=3" sizes="180x180" />
 
         {/* Preload critical resources */}
         <link

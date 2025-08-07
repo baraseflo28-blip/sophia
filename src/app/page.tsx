@@ -50,17 +50,17 @@ export default function Home() {
       {
         iconImage: "/Icons/whatsapp.png",
         label: useTranslations ? t("links.whatsapp") : "WhatsApp واتساب",
-        url: "https://google.com",
+        url: "https://wa.me/905342050168",
       },
       {
         iconImage: "/Icons/telegram.png",
         label: useTranslations ? t("links.telegram") : "Telegram تلغرام",
-        url: "https://google.com",
+        url: "https://t.me/sofiaturkey",
       },
       {
         iconImage: "/Icons/instagram.png",
         label: useTranslations ? t("links.instagram") : "Instagram انستاقرام",
-        url: "https://google.com",
+        url: "https://www.instagram.com/sofia_tr24",
       },
       {
         iconImage: "/Icons/tik-tok.png",
@@ -70,14 +70,14 @@ export default function Home() {
       {
         iconImage: "/Icons/facebook.png",
         label: useTranslations ? t("links.facebook") : "Facebook فيس بوك",
-        url: "https://google.com",
+        url: "https://www.facebook.com/share/16msSWTFTQ",
       },
       {
         iconImage: "/Icons/google-maps.png",
         label: useTranslations
           ? t("links.google_location")
           : "Google Location مواقع غوغل",
-        url: "https://google.com",
+        url: "https://maps.app.goo.gl/GHHHaKBokpciojKZ9",
       },
       {
         iconImage: "/Icons/download.png",

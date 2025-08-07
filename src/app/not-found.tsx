@@ -90,17 +90,17 @@ export default function NotFound() {
                 Fashion Collection
               </Typography>
             </Link>
-            <Link href="https://www.instagram.com/sofiafashions" style={{ textDecoration: "none" }}>
+            <Link href="https://www.instagram.com/sofia_tr24" style={{ textDecoration: "none" }}>
               <Typography sx={{ color: "white", "&:hover": { textDecoration: "underline" } }}>
                 Instagram
               </Typography>
             </Link>
-            <Link href="https://www.facebook.com/sofiafashions" style={{ textDecoration: "none" }}>
+            <Link href="https://www.facebook.com/share/16msSWTFTQ" style={{ textDecoration: "none" }}>
               <Typography sx={{ color: "white", "&:hover": { textDecoration: "underline" } }}>
                 Facebook
               </Typography>
             </Link>
-            <Link href="https://t.me/sofiafashions" style={{ textDecoration: "none" }}>
+            <Link href="https://t.me/sofiaturkey" style={{ textDecoration: "none" }}>
               <Typography sx={{ color: "white", "&:hover": { textDecoration: "underline" } }}>
                 Telegram
               </Typography>
