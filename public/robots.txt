@@ -1,0 +1,42 @@
+# Sofia Fashions - robots.txt
+User-agent: *
+Allow: /
+
+# Optimize crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://sofiafashions.com/sitemap.xml
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Block any unwanted crawlers if needed
+# User-agent: BadBot
+# Disallow: /
+
+# Important pages for fashion business
+Allow: /images/
+Allow: /Icons/
+Allow: /videos/
+
+# Make sure to crawl important business content
+Allow: /*fashions*
+Allow: /*sofia*
+Allow: /*sofia*

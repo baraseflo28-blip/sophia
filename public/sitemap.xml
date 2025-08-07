@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://sofiafashions.com/</loc>
+    <lastmod>2024-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/logo.png</image:loc>
+      <image:title>Sofia Fashions Logo</image:title>
+      <image:caption>Sofia Fashions - Premium Women's Fashion Store</image:caption>
+    </image:image>
+    <!-- Product Images -->
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0788.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0800.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0808.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0816.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0829.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0833.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0844.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0847.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://sofiafashions.com/images/carousel-images-optimized/IMG_0875.jpg</image:loc>
+      <image:title>Sofia Fashions Collection</image:title>
+      <image:caption>Latest women's fashion collection from Sofia Fashions</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

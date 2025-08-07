@@ -66,8 +66,8 @@ export const SocialLink: React.FC<SocialLinkProps> = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIdleAnimation(true);
-    }, (index * 100) + 1000); // Start after entrance animation
-    
+    }, index * 100 + 1000); // Start after entrance animation
+
     return () => clearTimeout(timer);
   }, [index]);
 
@@ -78,111 +78,79 @@ export const SocialLink: React.FC<SocialLinkProps> = ({
     }
   };
 
-  const linkProps = isSaveButton || onClick 
-    ? { 
-        href: "#", 
-        onClick: handleClick,
-        style: { textDecoration: 'none', color: 'inherit' }
-      }
-    : { 
-        href: url, 
-        target: "_blank", 
-        rel: "noopener noreferrer" 
-      };
-
-  // Simple and reliable animation
-  const getCardAnimation = () => {
-    // Always ensure opacity is 1 for all states
-    const baseState = {
-      opacity: 1,
-    };
-
-    if (isPressed) {
-      return {
-        ...baseState,
-        scale: 0.98,
-        y: -2,
-        transition: { duration: 0.1 }
-      };
-    }
-    
-    if (isHovered) {
-      return {
-        ...baseState,
-        y: -4,
-        scale: 1.02,
-        transition: { duration: 0.2, ease: "easeOut" }
-      };
-    }
-    
-    // Idle floating animation
-    if (showIdleAnimation) {
-      return {
-        ...baseState,
-        y: [0, -3, 0],
-        scale: 1,
-        transition: {
-          duration: 3 + (index * 0.3),
-          repeat: Infinity,
-          ease: "easeInOut",
-          repeatDelay: 0.5,
+  const linkProps =
+    isSaveButton || onClick
+      ? {
+          href: "#",
+          onClick: handleClick,
+          style: { textDecoration: "none", color: "inherit" },
         }
-      };
-    }
-    
-    // Default visible state (entrance animation)
-    return {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        delay: index * 0.1,
-        ease: [0.25, 0.25, 0, 1],
-      }
-    };
-  };
+      : {
+          href: url,
+          target: "_blank",
+          rel: "noopener noreferrer",
+        };
 
   // No icon animation - icons appear instantly with the row
   const iconAnimation = {
     scale: 1,
     rotate: 0,
     transition: {
-      duration: 0,  // Instant appearance
-    }
+      duration: 0, // Instant appearance
+    },
   };
 
-  // No text animation - text appears instantly with the row  
+  // No text animation - text appears instantly with the row
   const textAnimation = {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0,  // Instant appearance
-    }
+      duration: 0, // Instant appearance
+    },
   };
 
   return (
     <Link {...linkProps} underline="none">
       <StyledLinkCard
-        initial={{ 
-          opacity: 0, 
+        initial={{
+          opacity: 0,
           y: 30,
-          scale: 0.9
+          scale: 0.9,
         }}
-        animate={getCardAnimation()}
+        animate={
+          isPressed
+            ? { opacity: 1, scale: 0.98, y: -2 }
+            : isHovered
+            ? { opacity: 1, y: -4, scale: 1.02 }
+            : showIdleAnimation
+            ? { opacity: 1, y: [0, -3, 0], scale: 1 }
+            : { opacity: 1, y: 0, scale: 1 }
+        }
+        transition={{
+          duration: isPressed
+            ? 0.1
+            : isHovered
+            ? 0.2
+            : showIdleAnimation
+            ? 3 + index * 0.3
+            : 0.5,
+          delay: showIdleAnimation ? 0 : index * 0.1,
+          ease: [0.25, 0.25, 0, 1],
+          repeat: showIdleAnimation && !isHovered && !isPressed ? Infinity : 0,
+          repeatDelay: 0.5,
+        }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
         onTapStart={() => setIsPressed(true)}
         onTap={() => setIsPressed(false)}
         onTapCancel={() => setIsPressed(false)}
         style={{
-          boxShadow: isHovered ? "0px 8px 30px 0px #00000020" : "0px 0px 20px 0px #00000010"
+          boxShadow: isHovered
+            ? "0px 8px 30px 0px #00000020"
+            : "0px 0px 20px 0px #00000010",
         }}
       >
-        <motion.div
-          initial={{ scale: 1, rotate: 0 }}
-          animate={iconAnimation}
-        >
+        <motion.div initial={{ scale: 1, rotate: 0 }} animate={iconAnimation}>
           <IconImageWrapper>
             {iconImage ? (
               <IconImage src={iconImage} alt={label} loading="lazy" />

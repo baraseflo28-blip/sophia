@@ -35,27 +35,11 @@ export interface BackgroundVideoProps {
 
 export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   src = "/videos/video-poster.mp4",
-  poster = "/images/video-poster.jpg",
+  poster,
 }) => {
   return (
     <VideoContainer>
-      <StyledVideo
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster={poster}
-        onLoadStart={() => {
-          console.log("Video loading started:", src);
-        }}
-        onCanPlay={() => {
-          console.log("Video can play:", src);
-        }}
-        onError={(e) => {
-          console.log("Video failed to load:", src);
-          console.error("Video error:", e);
-        }}
-      >
+      <StyledVideo autoPlay muted loop playsInline poster={poster}>
         <source src={src} type="video/mp4" />
       </StyledVideo>
       <VideoOverlay />

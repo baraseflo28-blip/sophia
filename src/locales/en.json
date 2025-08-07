@@ -1,16 +1,16 @@
 {
   "brand": {
-    "name": "Sophia Fashion",
+    "name": "Sofia Fashion",
     "subtitle": "أبدعنا في إسطنبول",
     "subtitle2": "والان بداية جديدة من حلب"
   },
   "links": {
-    "whatsapp": "WhatsApp واتساب",
-    "telegram": "Telegram تلغرام",
-    "instagram": "Instagram انستاقرام",
-    "tiktok": "Tiktok تيك توك",
-    "facebook": "Facebook فيس بوك",
-    "google_location": "Google Location مواقع غوغل",
-    "save_add_kaydet": "Save  حفظ"
+    "whatsapp": "واتساب WhatsApp",
+    "telegram": "تلغرام Telegram",
+    "instagram": "انستاقرام Instagram",
+    "tiktok": "تيك توك Tiktok",
+    "facebook": "فيس بوك Facebook",
+    "google_location": "مواقع غوغل Google Location",
+    "save_add_kaydet": "حفظ Save"
   }
 }

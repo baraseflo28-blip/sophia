@@ -16,7 +16,8 @@ import {
   FaInfinity,
 } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { SocialLink, ImageCarousel, BackgroundVideo } from "@/components";
+import { SocialLink, BackgroundVideo, SEOStructuredData } from "@/components";
+import { Carousel } from "@/components/carousel";
 
 export default function Home() {
   const { t, ready } = useTranslation();
@@ -62,7 +63,9 @@ export default function Home() {
       },
       {
         iconImage: "/Icons/google-maps.png",
-        label: useTranslations ? t("links.google_location") : "Google Location مواقع غوغل",
+        label: useTranslations
+          ? t("links.google_location")
+          : "Google Location مواقع غوغل",
         url: "https://google.com",
       },
       {
@@ -79,6 +82,7 @@ export default function Home() {
 
   return (
     <>
+      <SEOStructuredData />
       <BackgroundVideo />
       <Box
         sx={{
@@ -102,7 +106,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{
             duration: 0.8,
-            ease: [0.25, 0.25, 0, 1]
+            ease: [0.25, 0.25, 0, 1],
           }}
         >
           <Box
@@ -114,84 +118,88 @@ export default function Home() {
               alignItems: "center",
             }}
           >
-          <Box
-            component="img"
-            src="/images/logo.png"
-            alt="Trend One Fashion"
-            sx={{
-              width: { xs: 80, sm: 90, md: 100 },
-              height: { xs: 80, sm: 90, md: 100 },
-              mb: 1,
-              borderRadius: "50%",
-              borderWidth: "0px",
-              borderColor: "#000000",
-              borderStyle: "solid",
-              objectFit: "contain",
-            }}
-            loading="lazy"
-          />
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 1,
-              mb: 0.5,
-            }}
-          >
-            <Typography
-              variant="h2"
-              color="white"
-              fontWeight="bold"
+            <Box
+              component="img"
+              src="/images/logo.png"
+              alt="Sofia Fashions - Premium Women's Fashion Store - Turkish Fashion from Istanbul to Aleppo"
               sx={{
-                textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-                fontSize: { xs: "1.8rem", sm: "2rem", md: "2.2rem" },
-                margin: 0,
-                textAlign: "center",
+                width: { xs: 80, sm: 90, md: 100 },
+                height: { xs: 80, sm: 90, md: 100 },
+                mb: 1,
+                borderRadius: "50%",
+                borderWidth: "0px",
+                borderColor: "#000000",
+                borderStyle: "solid",
+                objectFit: "contain",
+              }}
+              loading="lazy"
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1,
+                mb: 0.5,
               }}
             >
-              {isClient && ready ? t("brand.name") : "Sophia Fashion"}
-            </Typography>
-            <MdVerified
-              size={28}
-              color="#1DA1F2"
-              style={{
-                opacity: 1,
-                filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.3))",
-              }}
-            />
-          </Box>
+              <Typography
+                variant="h2"
+                color="white"
+                fontWeight="bold"
+                sx={{
+                  textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
+                  fontSize: { xs: "1.8rem", sm: "2rem", md: "2.2rem" },
+                  margin: 0,
+                  textAlign: "center",
+                }}
+              >
+                {isClient && ready ? t("brand.name") : "Sofia Fashion"}
+              </Typography>
+              <MdVerified
+                size={28}
+                color="#1DA1F2"
+                style={{
+                  opacity: 1,
+                  filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.3))",
+                }}
+              />
+            </Box>
 
-          <Typography
-            variant="h1"
-            color="white"
-            sx={{
-              opacity: 0.9,
-              textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
-              fontSize: { xs: "1.5rem", sm: "1.5rem", md: "1.5rem" },
-              margin: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            {isClient && ready ? t("brand.subtitle") : "أبدعنا في إسطنبول"}
-          </Typography>
-          <Typography
-            variant="h5"
-            color="white"
-            sx={{
-              opacity: 0.9,
-              textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
-              fontSize: { xs: "1.5rem", sm: "1.5rem", md: "1.5rem" },
-              margin: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            {isClient && ready ? t("brand.subtitle2") : "والان بداية جديدة من حلب"}
-          </Typography>
-        </Box>
+            <Typography
+              variant="h1"
+              color="white"
+              sx={{
+                opacity: 0.9,
+                textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
+                fontSize: { xs: "1.5rem", sm: "1.5rem", md: "1.5rem" },
+                margin: 0,
+                fontWeight: "bold",
+                textAlign: "right",
+                direction: "rtl",
+              }}
+            >
+              {isClient && ready ? t("brand.subtitle") : "أبدعنا في إسطنبول"}
+            </Typography>
+            <Typography
+              variant="h5"
+              color="white"
+              sx={{
+                opacity: 0.9,
+                textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
+                fontSize: { xs: "1.5rem", sm: "1.5rem", md: "1.5rem" },
+                margin: 0,
+                fontWeight: "bold",
+                textAlign: "right",
+                direction: "rtl",
+              }}
+            >
+              {isClient && ready
+                ? t("brand.subtitle2")
+                : "والان بداية جديدة من حلب"}
+            </Typography>
+          </Box>
         </motion.div>
 
         {/* Social Links Section */}
@@ -268,13 +276,42 @@ export default function Home() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{
             duration: 0.6,
-            delay: (socialLinks.length * 0.1) + 0.3, // After all social links
-            ease: [0.25, 0.25, 0, 1]
+            delay: socialLinks.length * 0.1 + 0.3, // After all social links
+            ease: [0.25, 0.25, 0, 1],
           }}
           style={{ width: "100%", maxWidth: "700px" }}
         >
-          <ImageCarousel />
+          <Carousel />
         </motion.div>
+
+        {/* SEO Content - Hidden but indexable */}
+        <Box
+          component="section"
+          sx={{
+            position: "absolute",
+            left: "-9999px",
+            width: "1px",
+            height: "1px",
+            overflow: "hidden",
+          }}
+          aria-hidden="true"
+        >
+          <Typography component="h1">
+            Sofia Fashions - Premium Women's Fashion Store Istanbul Aleppo
+          </Typography>
+          <Typography component="h2">
+            Turkish Fashion for Women - Ladies Clothing Store
+          </Typography>
+          <Typography component="h3">
+            صوفيا فاشن - متجر الأزياء النسائية الراقية
+          </Typography>
+          <Typography>
+            Sofia Fashions offers premium women's clothing, Turkish fashion,
+            ladies apparel, women's dresses, fashion accessories, clothing
+            store, fashion boutique, Istanbul fashion, Aleppo fashion, أزياء
+            نسائية, ملابس نسائية, متجر الألبسة, الأزياء التركية, إسطنبول, حلب
+          </Typography>
+        </Box>
       </Box>
     </>
   );

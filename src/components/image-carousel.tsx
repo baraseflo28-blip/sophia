@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, useMediaQuery, useTheme, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
 import { FaChevronLeft, FaChevronRight, FaInfinity } from "react-icons/fa";
 
 const CarouselWrapper = styled(Box)({
@@ -50,7 +51,9 @@ const CarouselTrack = styled(Box, {
 })<{ currentIndex: number; isTransitioning: boolean; dragOffset: number }>(
   ({ currentIndex, isTransitioning, dragOffset }) => ({
     display: "flex",
-    transition: isTransitioning ? "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+    transition: isTransitioning
+      ? "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+      : "none",
     transform: `translate3d(-${currentIndex * 180 - dragOffset}px, 0, 0)`,
     userSelect: "none",
     willChange: "transform",
@@ -75,13 +78,15 @@ const ImageCard = styled(Box)({
   },
 });
 
-const StyledImage = styled("img")({
+const ImageWrapper = styled(Box)({
+  position: "relative",
   width: "100%",
   height: "100%",
-  objectFit: "cover",
-  willChange: "transform",
-  backfaceVisibility: "hidden",
-  transform: "translateZ(0)",
+  "& img": {
+    willChange: "transform",
+    backfaceVisibility: "hidden",
+    transform: "translateZ(0)",
+  },
 });
 
 const NavButton = styled(IconButton)(({ theme }) => ({
@@ -102,7 +107,7 @@ const NavButton = styled(IconButton)(({ theme }) => ({
     transform: "translateY(-50%) scale(0.95)",
   },
   zIndex: 10, // Higher z-index to ensure buttons are clickable
-  [theme.breakpoints.down('md')]: {
+  [theme.breakpoints.down("md")]: {
     width: "48px",
     height: "48px",
     minWidth: "48px", // Larger on mobile for better touch experience
@@ -155,7 +160,9 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
     "/images/carousel-images-optimized/IMG_0875.jpg",
   ],
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(images.length + Math.floor(images.length / 2)); // Start from the middle image
+  const [currentIndex, setCurrentIndex] = useState(
+    images.length + Math.floor(images.length / 2)
+  ); // Start from center image of middle set
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
@@ -180,8 +187,10 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
   // Preload images for better performance
   useEffect(() => {
-    images.forEach((src) => {
+    images.forEach((src, index) => {
       const img = new Image();
+      img.onload = () => {};
+      img.onerror = () => {};
       img.src = src;
     });
   }, [images]);
@@ -194,14 +203,14 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         setIsTransitioning(false);
         setCurrentIndex(images.length);
         setTimeout(() => setIsTransitioning(true), 50);
-      }, 500);
+      }, 300);
     } else if (currentIndex < images.length) {
       // When we go before the first set, jump to the second set
       setTimeout(() => {
         setIsTransitioning(false);
         setCurrentIndex(images.length * 2 - 1);
         setTimeout(() => setIsTransitioning(true), 50);
-      }, 500);
+      }, 300);
     }
   }, [currentIndex, images.length]);
 
@@ -263,7 +272,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const handleMouseDown = (e: React.MouseEvent) => {
     // Only handle mouse down if not clicking on buttons
     const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('[role="button"]')) {
+    if (target.closest("button") || target.closest('[role="button"]')) {
       return;
     }
     e.preventDefault();
@@ -288,7 +297,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const handleTouchStart = (e: React.TouchEvent) => {
     // Only handle touch if not clicking on buttons
     const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('[role="button"]')) {
+    if (target.closest("button") || target.closest('[role="button"]')) {
       return;
     }
     handleStart(e.touches[0].clientX);
@@ -325,17 +334,27 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         >
           {infiniteImages.map((image, index) => (
             <ImageCard key={`${image}-${index}`}>
-              <StyledImage
-                src={image}
-                alt={`Gallery image ${(index % images.length) + 1}`}
-                loading="lazy"
-              />
+              <ImageWrapper>
+                <img
+                  src={image}
+                  alt={`Sofia Fashions Collection - Image ${
+                    (index % images.length) + 1
+                  }`}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                  onError={(e) => {}}
+                  onLoad={() => {}}
+                />
+              </ImageWrapper>
             </ImageCard>
           ))}
         </CarouselTrack>
 
         {/* Navigation Buttons */}
-        <LeftButton 
+        <LeftButton
           onClick={goToPrevious}
           onTouchStart={(e) => {
             e.stopPropagation();
@@ -346,7 +365,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         >
           <FaChevronLeft size={16} />
         </LeftButton>
-        <RightButton 
+        <RightButton
           onClick={goToNext}
           onTouchStart={(e) => {
             e.stopPropagation();
