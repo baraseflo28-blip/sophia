@@ -51,12 +51,30 @@ const ImageCard = styled(Box)({
   overflow: "hidden",
   flexShrink: 0,
   cursor: "pointer",
-  transition: "all 0.3s ease",
+  transition: "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)", // Smooth animation
   position: "relative",
   display: "block",
   boxSizing: "border-box",
+  userSelect: "none", // Prevent text selection
+  WebkitUserSelect: "none", // Safari support
+  MozUserSelect: "none", // Firefox support
+  msUserSelect: "none", // IE support
+  zIndex: 1, // Default z-index
   "&:hover": {
-    transform: "scale(1.05)",
+    transform: "scale(1.5)", // 50% bigger (1.5x scale)
+    zIndex: 10, // Bring to front on hover
+    boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)", // Add shadow for depth
+  },
+  // Prevent image dragging
+  "& img": {
+    pointerEvents: "none", // Disable pointer events on images
+    userSelect: "none",
+    WebkitUserSelect: "none",
+    MozUserSelect: "none",
+    msUserSelect: "none",
+    WebkitTouchCallout: "none", // Disable iOS callout
+    WebkitTapHighlightColor: "transparent", // Remove tap highlight
+    transition: "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)", // Smooth animation for image too
   },
 });
 
@@ -154,7 +172,10 @@ export const Carousel: React.FC<CarouselProps> = ({
   const [dragVelocity, setDragVelocity] = useState(0);
   const [lastDragTime, setLastDragTime] = useState(0);
   const [lastDragOffset, setLastDragOffset] = useState(0);
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [autoRotatePaused, setAutoRotatePaused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Create infinite array for endless scrolling - need more copies to avoid gaps
   const infiniteImages = [
@@ -169,10 +190,33 @@ export const Carousel: React.FC<CarouselProps> = ({
   const imageWidth = 155; // 140px + 15px gap
   const visibleImages = 5;
   const centerOffset = 2 * imageWidth; // Position to show 5 images with center image in middle
-  const translateX = centerOffset - currentIndex * imageWidth;
+  const translateX = centerOffset - currentIndex * imageWidth; // Remove permanent offset for proper snapping
+
+  // Function to pause auto-rotation
+  const pauseAutoRotate = () => {
+    setAutoRotatePaused(true);
+    setIsUserInteracting(true);
+
+    // Clear any existing resume timeout
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+    }
+  };
+
+  // Function to resume auto-rotation after delay
+  const resumeAutoRotate = () => {
+    setIsUserInteracting(false);
+
+    // Set a 2-second delay before resuming auto-rotation
+    resumeTimeoutRef.current = setTimeout(() => {
+      setAutoRotatePaused(false);
+    }, 2000);
+  };
 
   // Auto-rotation every 3 seconds with seamless infinite loop
   useEffect(() => {
+    if (autoRotatePaused) return; // Don't auto-rotate when paused
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => {
         const nextIndex = prev + 1;
@@ -185,18 +229,33 @@ export const Carousel: React.FC<CarouselProps> = ({
     }, 3000); // 3 seconds as requested
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [images.length, autoRotatePaused]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const goToPrevious = () => {
+    pauseAutoRotate();
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    resumeAutoRotate();
   };
 
   const goToNext = () => {
+    pauseAutoRotate();
     setCurrentIndex((prev) => (prev + 1) % images.length);
+    resumeAutoRotate();
   };
 
   const goToSlide = (index: number) => {
+    pauseAutoRotate();
     setCurrentIndex(index);
+    resumeAutoRotate();
   };
 
   // Improved button handlers with better mobile support and haptic feedback
@@ -227,6 +286,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   // Enhanced drag functionality for web and mobile
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
+    pauseAutoRotate();
     setIsDragging(true);
     setDragStart(e.clientX);
     setDragOffset(0);
@@ -243,23 +303,31 @@ export const Carousel: React.FC<CarouselProps> = ({
     if (!isDragging) return;
     e.preventDefault();
 
-    const threshold = 30; // Reduced threshold for better responsiveness
-    if (Math.abs(dragOffset) > threshold) {
-      if (dragOffset > 0) {
-        goToNext(); // Drag right = go to next
-      } else {
-        goToPrevious(); // Drag left = go to previous
-      }
+    // Calculate how many images to move based on drag distance
+    const threshold = imageWidth / 2; // Half an image width
+    const dragDistance = Math.abs(dragOffset);
+
+    if (dragDistance > threshold) {
+      const moveCount = Math.round(dragDistance / imageWidth);
+      const direction = dragOffset > 0 ? -1 : 1; // Positive drag = move left (previous), Negative drag = move right (next)
+
+      setCurrentIndex((prev) => {
+        const newIndex = prev + direction * moveCount;
+        // Ensure we stay within bounds with proper wrapping
+        return ((newIndex % images.length) + images.length) % images.length;
+      });
     }
 
     setIsDragging(false);
     setDragStart(0);
     setDragOffset(0);
+    resumeAutoRotate();
   };
 
   // Enhanced touch events for mobile with velocity detection
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault(); // Prevent text selection and scrolling issues
+    pauseAutoRotate();
     setIsDragging(true);
     setDragStart(e.touches[0].clientX);
     setDragOffset(0);
@@ -290,24 +358,19 @@ export const Carousel: React.FC<CarouselProps> = ({
     if (!isDragging) return;
     e.preventDefault();
 
-    const threshold = 15; // Lower threshold for better mobile sensitivity
-    const velocityThreshold = 0.5; // Velocity-based navigation
+    // Calculate how many images to move based on drag distance
+    const threshold = imageWidth / 2; // Half an image width
+    const dragDistance = Math.abs(dragOffset);
 
-    // Check both distance and velocity for natural feel
-    if (
-      Math.abs(dragOffset) > threshold ||
-      Math.abs(dragVelocity) > velocityThreshold
-    ) {
-      // Add haptic feedback for successful swipe
-      if ("vibrate" in navigator) {
-        navigator.vibrate(15); // Light haptic feedback for swipe
-      }
+    if (dragDistance > threshold) {
+      const moveCount = Math.round(dragDistance / imageWidth);
+      const direction = dragOffset > 0 ? -1 : 1; // Positive drag = move left (previous), Negative drag = move right (next)
 
-      if (dragOffset > 0 || dragVelocity > 0) {
-        goToPrevious(); // Swipe right = go to previous (natural direction)
-      } else {
-        goToNext(); // Swipe left = go to next (natural direction)
-      }
+      setCurrentIndex((prev) => {
+        const newIndex = prev + direction * moveCount;
+        // Ensure we stay within bounds with proper wrapping
+        return ((newIndex % images.length) + images.length) % images.length;
+      });
     }
 
     setIsDragging(false);
@@ -316,6 +379,29 @@ export const Carousel: React.FC<CarouselProps> = ({
     setDragVelocity(0);
     setLastDragTime(0);
     setLastDragOffset(0);
+    resumeAutoRotate();
+  };
+
+  // Prevent image downloading
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    return false;
+  };
+
+  const handleDragStart = (e: React.DragEvent) => {
+    e.preventDefault();
+    return false;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Prevent common keyboard shortcuts for saving
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      (e.key === "s" || e.key === "S" || e.key === "c" || e.key === "C")
+    ) {
+      e.preventDefault();
+      return false;
+    }
   };
 
   return (
@@ -327,14 +413,35 @@ export const Carousel: React.FC<CarouselProps> = ({
         onMouseUp={handleMouseUp}
         onMouseLeave={() => {
           if (isDragging) {
+            // Calculate how many images to move based on drag distance
+            const threshold = imageWidth / 2; // Half an image width
+            const dragDistance = Math.abs(dragOffset);
+
+            if (dragDistance > threshold) {
+              const moveCount = Math.round(dragDistance / imageWidth);
+              const direction = dragOffset > 0 ? -1 : 1; // Positive drag = move left (previous), Negative drag = move right (next)
+
+              setCurrentIndex((prev) => {
+                const newIndex = prev + direction * moveCount;
+                // Ensure we stay within bounds with proper wrapping
+                return (
+                  ((newIndex % images.length) + images.length) % images.length
+                );
+              });
+            }
+
             setIsDragging(false);
             setDragStart(0);
             setDragOffset(0);
+            resumeAutoRotate();
           }
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onContextMenu={handleContextMenu}
+        onDragStart={handleDragStart}
+        onKeyDown={handleKeyDown}
         sx={{
           cursor: isDragging ? "grabbing" : "grab",
           userSelect: "none",
@@ -353,12 +460,16 @@ export const Carousel: React.FC<CarouselProps> = ({
           translateX={translateX + dragOffset}
           isDragging={isDragging}
         >
-          {Array.from({ length: images.length * 3 }, (_, index) => {
+          {Array.from({ length: images.length * 5 }, (_, index) => {
             const imageIndex = index % images.length;
             const image = images[imageIndex];
 
             return (
-              <ImageCard key={`${image}-${index}`}>
+              <ImageCard
+                key={`${image}-${index}`}
+                onContextMenu={handleContextMenu}
+                onDragStart={handleDragStart}
+              >
                 <img
                   src={image}
                   alt={`Sofia Fashions Collection - Image ${imageIndex + 1}`}
@@ -373,7 +484,17 @@ export const Carousel: React.FC<CarouselProps> = ({
                     minWidth: "140px",
                     minHeight: "140px",
                     boxSizing: "border-box",
+                    pointerEvents: "none", // Disable pointer events
+                    userSelect: "none",
+                    WebkitUserSelect: "none",
+                    MozUserSelect: "none",
+                    msUserSelect: "none",
+                    WebkitTouchCallout: "none",
+                    WebkitTapHighlightColor: "transparent",
                   }}
+                  draggable={false} // Prevent dragging
+                  onContextMenu={handleContextMenu}
+                  onDragStart={handleDragStart}
                 />
               </ImageCard>
             );
