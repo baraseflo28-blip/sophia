@@ -16,7 +16,7 @@ import {
   FaInfinity,
 } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { SocialLink, BackgroundVideo, SEOStructuredData } from "@/components";
+import { SocialLink, BackgroundVideo, SEOStructuredData, SocialSharing } from "@/components";
 import { Carousel } from "@/components/carousel";
 
 export default function Home() {
@@ -84,6 +84,7 @@ export default function Home() {
     <>
       <SEOStructuredData />
       <BackgroundVideo />
+      <SocialSharing />
       <Box
         sx={{
           minHeight: "100vh",

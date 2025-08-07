@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ClientLayout from "./client-layout";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,21 +18,32 @@ export const metadata: Metadata = {
   title:
     "Sofia Fashions | Women's Fashion Store Istanbul & Aleppo | صوفيا فاشن",
   description:
-    "Sofia Fashions - Premium women's clothing store. Turkish fashion from Istanbul, now serving Aleppo. صوفيا فاشن - متجر الأزياء النسائية الراقية - أبدعنا في إسطنبول والآن بداية جديدة من حلب",
+    "Sofia Fashions - Premium women's fashion boutique in Aleppo. Turkish designer clothing, elegant dresses, luxury women's apparel from Istanbul. Shop authentic Turkish fashion, women's clothing store, fashion accessories. صوفيا فاشن - بوتيك الأزياء النسائية الراقية في حلب - ملابس تركية أصيلة، فساتين أنيقة، أزياء فاخرة للنساء",
   keywords: [
     "Sofia Fashions",
     "Sofia Fashion",
-    "Women's Fashion",
-    "Turkish Fashion",
-    "Istanbul Fashion",
-    "Aleppo Fashion",
-    "Ladies Clothing",
+    "Women's Fashion Boutique",
+    "Turkish Fashion Designer",
+    "Istanbul Fashion Store",
+    "Aleppo Fashion Shop",
+    "Ladies Clothing Store",
+    "Women's Dresses",
+    "Fashion Accessories",
+    "Luxury Women's Apparel",
+    "Turkish Designer Clothing",
+    "Women's Fashion Aleppo",
+    "Fashion Store Syria",
     "صوفيا فاشن",
-    "أزياء نسائية",
-    "أزياء تركية",
+    "أزياء نسائية راقية",
+    "أزياء تركية أصيلة",
+    "متجر الأزياء النسائية",
+    "بوتيك الأزياء",
+    "ملابس نسائية فاخرة",
+    "فساتين أنيقة",
+    "إكسسوارات الأزياء",
     "إسطنبول",
     "حلب",
-    "ملابس نسائية",
+    "سوريا"
   ],
   authors: [{ name: "Sofia Fashions" }],
   creator: "Sofia Fashions",
@@ -108,6 +120,19 @@ export const metadata: Metadata = {
   verification: {
     google: "google-site-verification-code-here", // Replace with actual verification code
   },
+  alternates: {
+    canonical: "https://sofiafashions.com/",
+    languages: {
+      'ar': 'https://sofiafashions.com/',
+      'en': 'https://sofiafashions.com/',
+    },
+  },
+  other: {
+    'revisit-after': '7 days',
+    'distribution': 'global',
+    'rating': 'general',
+    'expires': 'never',
+  },
 };
 
 // Create viewport export for Next.js 15 compatibility
@@ -134,8 +159,19 @@ export default function RootLayout({
         <meta name="geo.placename" content="Aleppo" />
         <meta name="geo.position" content="36.2021;37.1343" />
         <meta name="ICBM" content="36.2021, 37.1343" />
+        
+        {/* Resource hints for better performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        
+        {/* Preload critical resources */}
+        <link rel="preload" href="/images/logo.png" as="image" type="image/png" />
+        <link rel="preload" href="/videos/video-poster.mp4" as="video" type="video/mp4" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <GoogleAnalytics />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

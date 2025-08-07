@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   // Enable experimental features for better performance
   experimental: {
     // optimizeCss: true, // Disabled due to missing critters dependency
+    optimizePackageImports: ['@mui/material', '@mui/icons-material'],
+  },
+  
+  // Reduce JavaScript bundle size
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
 
   // Image optimization
