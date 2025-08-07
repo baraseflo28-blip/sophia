@@ -34,18 +34,19 @@ const CarouselTrack = styled(Box, {
 }));
 
 const ImageCard = styled(Box)({
-  width: "140px", // Square 1:1 ratio as requested
-  height: "140px", // Square 1:1 ratio as requested
-  minWidth: "140px", // Prevent shrinking
-  minHeight: "140px", // Prevent shrinking
-  maxWidth: "140px", // Prevent growing
-  maxHeight: "140px", // Prevent growing
+  width: "140px !important", // Square 1:1 ratio as requested
+  height: "140px !important", // Square 1:1 ratio as requested
+  minWidth: "140px !important", // Prevent shrinking
+  minHeight: "140px !important", // Prevent shrinking
+  maxWidth: "140px !important", // Prevent growing
+  maxHeight: "140px !important", // Prevent growing
   borderRadius: "16px",
   overflow: "hidden",
   flexShrink: 0,
   cursor: "pointer",
   transition: "all 0.3s ease",
   position: "relative",
+  display: "block",
   "&:hover": {
     transform: "scale(1.05)",
   },
@@ -255,13 +256,17 @@ export const Carousel: React.FC<CarouselProps> = ({
                 <img
                   src={image}
                   alt={`Sofia Fashions Collection - Image ${imageIndex + 1}`}
-                                           style={{
-                           width: "140px",
-                           height: "140px",
-                           objectFit: "cover",
-                           borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
-                           display: "block",
-                         }}
+                  style={{
+                    width: "140px !important",
+                    height: "140px !important",
+                    objectFit: "cover",
+                    borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
+                    display: "block",
+                    maxWidth: "140px",
+                    maxHeight: "140px",
+                    minWidth: "140px",
+                    minHeight: "140px",
+                  }}
                 />
               </ImageCard>
             );
