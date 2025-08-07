@@ -14,12 +14,14 @@ const CarouselWrapper = styled(Box)({
 
 const CarouselContainer = styled(Box)({
   position: "relative",
-  width: "100%",
+  width: "775px", // Exactly 5 images: 5 * (140px + 15px) = 775px
+  maxWidth: "100%", // Responsive on smaller screens
   height: "200px",
-  overflow: "visible", // Changed to visible to show rounded corners
+  overflow: "hidden", // Hide images outside the 5-image view
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  margin: "0 auto",
 });
 
 const CarouselTrack = styled(Box, {
@@ -132,10 +134,11 @@ export const Carousel: React.FC<CarouselProps> = ({
     ...images,
   ];
 
-  // Calculate translate to always show 5 images (140px + 15px gap = 155px per image)
+  // Calculate translate to show exactly 5 images (140px + 15px gap = 155px per image)
   const imageWidth = 155; // 140px + 15px gap
-  const containerCenter = 310; // Position to center the view and show 5 images
-  const translateX = containerCenter - currentIndex * imageWidth;
+  const visibleImages = 5;
+  const centerOffset = 2 * imageWidth; // Position to show 5 images with center image in middle
+  const translateX = centerOffset - (currentIndex * imageWidth);
 
   // Auto-rotation every 3 seconds with seamless infinite loop
   useEffect(() => {
@@ -165,8 +168,9 @@ export const Carousel: React.FC<CarouselProps> = ({
     setCurrentIndex(index);
   };
 
-  // Drag functionality
+  // Enhanced drag functionality for web and mobile
   const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsDragging(true);
     setDragStart(e.clientX);
     setDragOffset(0);
@@ -174,19 +178,21 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
+    e.preventDefault();
     const offset = e.clientX - dragStart;
     setDragOffset(offset);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: React.MouseEvent) => {
     if (!isDragging) return;
+    e.preventDefault();
     
-    const threshold = 50; // Minimum drag distance to trigger slide change
+    const threshold = 30; // Reduced threshold for better responsiveness
     if (Math.abs(dragOffset) > threshold) {
       if (dragOffset > 0) {
-        goToPrevious();
+        goToNext(); // Drag right = go to next
       } else {
-        goToNext();
+        goToPrevious(); // Drag left = go to previous
       }
     }
     
@@ -195,7 +201,7 @@ export const Carousel: React.FC<CarouselProps> = ({
     setDragOffset(0);
   };
 
-  // Touch events for mobile
+  // Enhanced touch events for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true);
     setDragStart(e.touches[0].clientX);
@@ -204,19 +210,21 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
+    e.preventDefault(); // Prevent scrolling
     const offset = e.touches[0].clientX - dragStart;
     setDragOffset(offset);
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e: React.TouchEvent) => {
     if (!isDragging) return;
+    e.preventDefault();
     
-    const threshold = 50;
+    const threshold = 30; // Reduced threshold for mobile
     if (Math.abs(dragOffset) > threshold) {
       if (dragOffset > 0) {
-        goToPrevious();
+        goToNext(); // Drag right = go to next
       } else {
-        goToNext();
+        goToPrevious(); // Drag left = go to previous
       }
     }
     
@@ -232,17 +240,29 @@ export const Carousel: React.FC<CarouselProps> = ({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onMouseLeave={() => {
+          if (isDragging) {
+            setIsDragging(false);
+            setDragStart(0);
+            setDragOffset(0);
+          }
+        }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         sx={{
           cursor: isDragging ? 'grabbing' : 'grab',
           userSelect: 'none',
+          touchAction: 'pan-y', // Allow vertical scrolling but handle horizontal
+          // Responsive width for mobile
+          '@media (max-width: 800px)': {
+            width: '100%',
+            maxWidth: '100vw',
+          },
         }}
       >
         <CarouselTrack translateX={translateX + dragOffset}>
-          {Array.from({ length: 15 }, (_, index) => {
+          {Array.from({ length: images.length * 3 }, (_, index) => {
             const imageIndex = index % images.length;
             const image = images[imageIndex];
             
