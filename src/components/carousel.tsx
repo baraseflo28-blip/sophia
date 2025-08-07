@@ -84,7 +84,7 @@ const DotsContainer = styled(Box)({
   display: "flex",
   justifyContent: "center",
   gap: "8px",
-  marginTop: "16px",
+  marginTop: "8px", // Reduced from 16px to 8px
 });
 
 const Dot = styled(Box, {

@@ -113,7 +113,7 @@ export default function Home() {
           <Box
             sx={{
               textAlign: "center",
-              mb: { xs: 2, sm: 3, md: 3 },
+              mb: { xs: 1.5, sm: 2, md: 2 }, // Reduced spacing
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -208,10 +208,10 @@ export default function Home() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 1,
+            gap: 0.5, // Reduced from 1 to 0.5
             width: "100%",
             maxWidth: "700px",
-            mb: 2,
+            mb: 1, // Reduced from 2 to 1
           }}
         >
           {socialLinks.map((link, index) => (
@@ -233,8 +233,8 @@ export default function Home() {
             width: "100%",
             display: "flex",
             alignItems: "center",
-            mb: 2,
-            mt: 1,
+            mb: 1, // Reduced from 2 to 1
+            mt: 0.5, // Reduced from 1 to 0.5
           }}
         >
           <Box
