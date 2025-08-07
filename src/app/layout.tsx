@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Sophia Fashion - أبدعنا في إسطنبول والان بداية جديدة من حلب",
-  description: "Sophia Fashion - تجارة الألبسة النسائية تركيا إسطنبول - أبدعنا في إسطنبول والان بداية جديدة من حلب",
+  description:
+    "Sophia Fashion - تجارة الألبسة النسائية تركيا إسطنبول - أبدعنا في إسطنبول والان بداية جديدة من حلب",
   openGraph: {
     title: "Sophia Fashion",
     description: "أبدعنا في إسطنبول والان بداية جديدة من حلب",
@@ -39,8 +40,30 @@ export const metadata: Metadata = {
     images: ["https://sofiafashions.com/images/logo.png"],
   },
   icons: {
-    icon: "/images/logo.png",
-    apple: "/images/logo.png",
+    icon: [
+      {
+        url: "/images/logo.png",
+        sizes: "any",
+      },
+      {
+        url: "/images/logo.png", 
+        sizes: "16x16",
+        type: "image/png",
+      },
+      {
+        url: "/images/logo.png",
+        sizes: "32x32", 
+        type: "image/png",
+      },
+    ],
+    apple: [
+      {
+        url: "/images/logo.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/images/logo.png",
   },
 };
 
@@ -59,9 +82,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
