@@ -194,7 +194,11 @@ export default function RootLayout({
           type="image/png"
           sizes="512x512"
         />
-        <link rel="apple-touch-icon" href="/images/logo.png?v=2" sizes="180x180" />
+        <link
+          rel="apple-touch-icon"
+          href="/images/logo.png?v=2"
+          sizes="180x180"
+        />
         <link rel="shortcut icon" href="/favicon.ico?v=2" />
 
         {/* Preload critical resources */}
