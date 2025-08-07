@@ -243,15 +243,10 @@ export const Carousel: React.FC<CarouselProps> = ({
           {Array.from({ length: 15 }, (_, index) => {
             const imageIndex = index % images.length;
             const image = images[imageIndex];
-            const isFirstImage = imageIndex === 0;
-            const isLastImage = imageIndex === images.length - 1;
             
             return (
               <ImageCard 
                 key={`${image}-${index}`}
-                sx={{
-                  borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
-                }}
               >
                 <img
                   src={image}
@@ -260,7 +255,7 @@ export const Carousel: React.FC<CarouselProps> = ({
                     width: "140px !important",
                     height: "140px !important",
                     objectFit: "cover",
-                    borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
+                    borderRadius: "16px",
                     display: "block",
                     maxWidth: "140px",
                     maxHeight: "140px",
