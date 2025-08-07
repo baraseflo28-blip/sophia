@@ -9,13 +9,14 @@ const CarouselWrapper = styled(Box)({
   position: "relative",
   width: "100%",
   margin: "0 auto",
+  padding: "0 20px", // Add padding to ensure rounded corners are visible
 });
 
 const CarouselContainer = styled(Box)({
   position: "relative",
   width: "100%",
   height: "200px",
-  overflow: "hidden",
+  overflow: "visible", // Changed to visible to show rounded corners
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -40,13 +41,14 @@ const ImageCard = styled(Box)({
   minHeight: "140px !important", // Prevent shrinking
   maxWidth: "140px !important", // Prevent growing
   maxHeight: "140px !important", // Prevent growing
-  borderRadius: "16px",
+  borderRadius: "16px !important", // Ensure border radius is applied
   overflow: "hidden",
   flexShrink: 0,
   cursor: "pointer",
   transition: "all 0.3s ease",
   position: "relative",
   display: "block",
+  boxSizing: "border-box",
   "&:hover": {
     transform: "scale(1.05)",
   },
@@ -255,12 +257,13 @@ export const Carousel: React.FC<CarouselProps> = ({
                     width: "140px !important",
                     height: "140px !important",
                     objectFit: "cover",
-                    borderRadius: "16px",
+                    borderRadius: "16px !important",
                     display: "block",
                     maxWidth: "140px",
                     maxHeight: "140px",
                     minWidth: "140px",
                     minHeight: "140px",
+                    boxSizing: "border-box",
                   }}
                 />
               </ImageCard>
