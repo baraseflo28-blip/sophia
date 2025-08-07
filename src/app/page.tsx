@@ -16,7 +16,12 @@ import {
   FaInfinity,
 } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { SocialLink, BackgroundVideo, SEOStructuredData, SocialSharing } from "@/components";
+import {
+  SocialLink,
+  BackgroundVideo,
+  SEOStructuredData,
+  SocialSharing,
+} from "@/components";
 import { Carousel } from "@/components/carousel";
 
 export default function Home() {
@@ -208,7 +213,7 @@ export default function Home() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 0.5, // Reduced from 1 to 0.5
+            gap: 1, // Reduced from 1 to 0.5
             width: "100%",
             maxWidth: "700px",
             mb: 1, // Reduced from 2 to 1
@@ -233,8 +238,8 @@ export default function Home() {
             width: "100%",
             display: "flex",
             alignItems: "center",
-            mb: 1, // Reduced from 2 to 1
-            mt: 0.5, // Reduced from 1 to 0.5
+            mb: 0.1, // Reduced from 2 to 1
+            mt: 0.1, // Reduced from 1 to 0.5
           }}
         >
           <Box
