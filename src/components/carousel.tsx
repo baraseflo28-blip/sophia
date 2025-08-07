@@ -36,11 +36,16 @@ const CarouselTrack = styled(Box, {
 const ImageCard = styled(Box)({
   width: "140px", // Square 1:1 ratio as requested
   height: "140px", // Square 1:1 ratio as requested
+  minWidth: "140px", // Prevent shrinking
+  minHeight: "140px", // Prevent shrinking
+  maxWidth: "140px", // Prevent growing
+  maxHeight: "140px", // Prevent growing
   borderRadius: "16px",
   overflow: "hidden",
   flexShrink: 0,
   cursor: "pointer",
   transition: "all 0.3s ease",
+  position: "relative",
   "&:hover": {
     transform: "scale(1.05)",
   },
@@ -250,12 +255,13 @@ export const Carousel: React.FC<CarouselProps> = ({
                 <img
                   src={image}
                   alt={`Sofia Fashions Collection - Image ${imageIndex + 1}`}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
-                  }}
+                                           style={{
+                           width: "140px",
+                           height: "140px",
+                           objectFit: "cover",
+                           borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
+                           display: "block",
+                         }}
                 />
               </ImageCard>
             );
