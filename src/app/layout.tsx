@@ -118,7 +118,14 @@ export const metadata: Metadata = {
         type: "image/png",
       },
     ],
-    shortcut: ["/favicon.ico"],
+    shortcut: "/favicon.ico",
+    other: [
+      {
+        rel: "icon",
+        url: "/favicon.ico",
+        type: "image/x-icon",
+      },
+    ],
   },
   verification: {
     google: "google-site-verification-code-here", // Replace with actual verification code
@@ -173,7 +180,12 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-        {/* Favicon and App Icons are handled by metadata.icons - no need for manual links */}
+        {/* Explicit favicon links for maximum browser compatibility */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+        <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/images/logo.png" sizes="180x180" />
+        <link rel="shortcut icon" href="/favicon.ico" />
 
         {/* Preload critical resources */}
         <link
