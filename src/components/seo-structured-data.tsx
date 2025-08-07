@@ -1,5 +1,3 @@
-"use client";
-
 export function SEOStructuredData() {
   const businessData = {
     "@context": "https://schema.org",

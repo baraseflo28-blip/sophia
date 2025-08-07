@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     "إكسسوارات الأزياء",
     "إسطنبول",
     "حلب",
-    "سوريا"
+    "سوريا",
   ],
   authors: [{ name: "Sofia Fashions" }],
   creator: "Sofia Fashions",
@@ -62,9 +62,11 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://sofiafashions.com/images/shareimage.jpeg",
+        secureUrl: "https://sofiafashions.com/images/shareimage.jpeg",
         width: 1200,
         height: 630,
         alt: "Sofia Fashions - Premium Women's Fashion Collection - Turkish Fashion from Istanbul to Aleppo",
+        type: "image/jpeg",
       },
     ],
     locale: "ar_AR",
@@ -95,16 +97,17 @@ export const metadata: Metadata = {
     icon: [
       {
         url: "/favicon.ico",
-        sizes: "any",
+        sizes: "16x16 32x32 48x48",
+        type: "image/x-icon",
       },
       {
-        url: "/images/logo.png",
-        sizes: "16x16",
+        url: "/icon-192.png",
+        sizes: "192x192",
         type: "image/png",
       },
       {
-        url: "/images/logo.png",
-        sizes: "32x32",
+        url: "/icon-512.png",
+        sizes: "512x512",
         type: "image/png",
       },
     ],
@@ -123,15 +126,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://sofiafashions.com/",
     languages: {
-      'ar': 'https://sofiafashions.com/',
-      'en': 'https://sofiafashions.com/',
+      ar: "https://sofiafashions.com/",
+      en: "https://sofiafashions.com/",
     },
   },
   other: {
-    'revisit-after': '7 days',
-    'distribution': 'global',
-    'rating': 'general',
-    'expires': 'never',
+    "revisit-after": "7 days",
+    distribution: "global",
+    rating: "general",
+    expires: "never",
   },
 };
 
@@ -159,24 +162,83 @@ export default function RootLayout({
         <meta name="geo.placename" content="Aleppo" />
         <meta name="geo.position" content="36.2021;37.1343" />
         <meta name="ICBM" content="36.2021, 37.1343" />
-        
+
         {/* Resource hints for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        
+
+        {/* Favicon and App Icons */}
+        <link
+          rel="icon"
+          type="image/x-icon"
+          href="/favicon.ico"
+          sizes="16x16 32x32 48x48"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          href="/icon-192.png"
+          sizes="192x192"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          href="/icon-512.png"
+          sizes="512x512"
+        />
+        <link rel="apple-touch-icon" href="/images/logo.png" sizes="180x180" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+
         {/* Preload critical resources */}
-        <link rel="preload" href="/images/logo.png" as="image" type="image/png" />
-        <link rel="preload" href="/videos/video-poster.mp4" as="video" type="video/mp4" />
-        
-        {/* Additional meta tags for better social sharing */}
-        <meta property="og:image" content="https://sofiafashions.com/images/shareimage.jpeg" />
+        <link
+          rel="preload"
+          href="/images/logo.png"
+          as="image"
+          type="image/png"
+        />
+        <link
+          rel="preload"
+          href="/videos/video-poster-optimized.mp4"
+          as="video"
+          type="video/mp4"
+        />
+
+        {/* Enhanced meta tags for better social sharing */}
+        <meta
+          property="og:image"
+          content="https://sofiafashions.com/images/shareimage.jpeg"
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/jpeg" />
-        <meta name="twitter:image" content="https://sofiafashions.com/images/shareimage.jpeg" />
-        <meta name="twitter:image:alt" content="Sofia Fashions - Premium Women's Fashion Collection" />
+        <meta
+          property="og:image:secure_url"
+          content="https://sofiafashions.com/images/shareimage.jpeg"
+        />
+        <meta
+          name="twitter:image"
+          content="https://sofiafashions.com/images/shareimage.jpeg"
+        />
+        <meta
+          name="twitter:image:alt"
+          content="Sofia Fashions - Premium Women's Fashion Collection"
+        />
+
+        {/* WhatsApp specific meta tags */}
+        <meta
+          property="og:image:alt"
+          content="Sofia Fashions - Premium Women's Fashion Collection - Turkish Fashion from Istanbul to Aleppo"
+        />
+        <meta property="og:updated_time" content="2025-01-07T12:00:00Z" />
+
+        {/* Additional social platforms */}
+        <meta name="telegram:channel" content="@sofiafashions" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <GoogleAnalytics />

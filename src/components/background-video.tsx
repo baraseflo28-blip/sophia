@@ -34,7 +34,7 @@ export interface BackgroundVideoProps {
 }
 
 export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
-  src = "/videos/video-poster.mp4",
+  src = "/videos/video-poster-optimized.mp4",
   poster,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -43,6 +43,16 @@ export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
+    // Optimize video loading
+    video.preload = "metadata";
+
+    const handleLoadedData = () => {
+      // Start playing immediately when data is loaded
+      video.play().catch(() => {
+        // Ignore autoplay failures (some browsers block autoplay)
+      });
+    };
+
     const handleTimeUpdate = () => {
       // Loop video every 10 seconds
       if (video.currentTime >= 10) {
@@ -50,22 +60,25 @@ export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
       }
     };
 
-    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener("loadeddata", handleLoadedData);
+    video.addEventListener("timeupdate", handleTimeUpdate);
 
     return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener("loadeddata", handleLoadedData);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
     };
   }, []);
 
   return (
     <VideoContainer>
-      <StyledVideo 
+      <StyledVideo
         ref={videoRef}
-        autoPlay 
-        muted 
-        loop 
-        playsInline 
+        autoPlay
+        muted
+        loop
+        playsInline
         poster={poster}
+        preload="metadata"
       >
         <source src={src} type="video/mp4" />
       </StyledVideo>

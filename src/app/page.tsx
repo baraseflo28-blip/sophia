@@ -29,7 +29,13 @@ export default function Home() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    // Use requestIdleCallback for better performance
+    if (typeof window.requestIdleCallback !== "undefined") {
+      window.requestIdleCallback(() => setIsClient(true));
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(() => setIsClient(true), 0);
+    }
   }, []);
 
   // Add keyboard shortcuts for save functionality
@@ -84,6 +90,41 @@ export default function Home() {
   };
 
   const socialLinks = getSocialLinks();
+
+  // Show loading spinner during initial hydration
+  if (!isClient || !ready) {
+    return (
+      <>
+        <SEOStructuredData />
+        <BackgroundVideo />
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            zIndex: 9999,
+          }}
+        >
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              border: "3px solid rgba(255, 255, 255, 0.3)",
+              borderTop: "3px solid white",
+              borderRadius: "50%",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+        </Box>
+      </>
+    );
+  }
 
   return (
     <>
@@ -148,6 +189,13 @@ export default function Home() {
                 justifyContent: "center",
                 gap: 1,
                 mb: 0.5,
+                "& *": {
+                  direction: "ltr !important", // Force LTR direction
+                },
+              }}
+              style={{
+                direction: "ltr",
+                unicodeBidi: "embed",
               }}
             >
               <Typography
@@ -161,7 +209,7 @@ export default function Home() {
                   textAlign: "center",
                 }}
               >
-                {isClient && ready ? t("brand.name") : "Sofia Fashion"}
+                Sofia Fashion
               </Typography>
               <MdVerified
                 size={28}

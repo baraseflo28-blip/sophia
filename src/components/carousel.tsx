@@ -25,16 +25,20 @@ const CarouselContainer = styled(Box)({
 });
 
 const CarouselTrack = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "translateX",
-})<{ translateX: number }>(({ translateX }) => ({
-  display: "flex",
-  gap: "15px",
-  height: "100%",
-  alignItems: "center",
-  transition: "transform 0.5s ease",
-  transform: `translateX(${translateX}px)`,
-  willChange: "transform",
-}));
+  shouldForwardProp: (prop) => prop !== "translateX" && prop !== "isDragging",
+})<{ translateX: number; isDragging?: boolean }>(
+  ({ translateX, isDragging }) => ({
+    display: "flex",
+    gap: "15px",
+    height: "100%",
+    alignItems: "center",
+    transition: isDragging
+      ? "none"
+      : "transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)", // Faster, smoother transition
+    transform: `translateX(${translateX}px)`,
+    willChange: "transform",
+  })
+);
 
 const ImageCard = styled(Box)({
   width: "140px !important", // Square 1:1 ratio as requested
@@ -66,9 +70,22 @@ const NavButton = styled(IconButton)({
   height: "48px",
   zIndex: 10,
   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+  touchAction: "manipulation", // Improve touch response
+  userSelect: "none",
+  WebkitUserSelect: "none",
   "&:hover": {
     backgroundColor: "rgba(255, 255, 255, 1)",
     transform: "translateY(-50%) scale(1.1)",
+  },
+  "&:active": {
+    backgroundColor: "rgba(255, 255, 255, 1)",
+    transform: "translateY(-50%) scale(1.05)",
+  },
+  // Better mobile targeting
+  "@media (max-width: 768px)": {
+    width: "56px",
+    height: "56px",
+    fontSize: "18px",
   },
 });
 
@@ -96,9 +113,20 @@ const Dot = styled(Box, {
   backgroundColor: active ? "#ffffff" : "rgba(255, 255, 255, 0.4)",
   cursor: "pointer",
   transition: "all 0.3s ease",
+  touchAction: "manipulation", // Better touch response
+  userSelect: "none",
+  WebkitUserSelect: "none",
   "&:hover": {
     backgroundColor: active ? "#ffffff" : "rgba(255, 255, 255, 0.7)",
     transform: "scale(1.2)",
+  },
+  "&:active": {
+    transform: "scale(1.1)",
+  },
+  // Better mobile targeting
+  "@media (max-width: 768px)": {
+    width: "12px",
+    height: "12px",
   },
 }));
 
@@ -123,6 +151,9 @@ export const Carousel: React.FC<CarouselProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
+  const [dragVelocity, setDragVelocity] = useState(0);
+  const [lastDragTime, setLastDragTime] = useState(0);
+  const [lastDragOffset, setLastDragOffset] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Create infinite array for endless scrolling - need more copies to avoid gaps
@@ -138,7 +169,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   const imageWidth = 155; // 140px + 15px gap
   const visibleImages = 5;
   const centerOffset = 2 * imageWidth; // Position to show 5 images with center image in middle
-  const translateX = centerOffset - (currentIndex * imageWidth);
+  const translateX = centerOffset - currentIndex * imageWidth;
 
   // Auto-rotation every 3 seconds with seamless infinite loop
   useEffect(() => {
@@ -168,6 +199,31 @@ export const Carousel: React.FC<CarouselProps> = ({
     setCurrentIndex(index);
   };
 
+  // Improved button handlers with better mobile support and haptic feedback
+  const handlePreviousClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Add haptic feedback for mobile devices
+    if ("vibrate" in navigator) {
+      navigator.vibrate(10); // Very light haptic feedback
+    }
+
+    goToPrevious();
+  };
+
+  const handleNextClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Add haptic feedback for mobile devices
+    if ("vibrate" in navigator) {
+      navigator.vibrate(10); // Very light haptic feedback
+    }
+
+    goToNext();
+  };
+
   // Enhanced drag functionality for web and mobile
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -186,7 +242,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   const handleMouseUp = (e: React.MouseEvent) => {
     if (!isDragging) return;
     e.preventDefault();
-    
+
     const threshold = 30; // Reduced threshold for better responsiveness
     if (Math.abs(dragOffset) > threshold) {
       if (dragOffset > 0) {
@@ -195,42 +251,71 @@ export const Carousel: React.FC<CarouselProps> = ({
         goToPrevious(); // Drag left = go to previous
       }
     }
-    
+
     setIsDragging(false);
     setDragStart(0);
     setDragOffset(0);
   };
 
-  // Enhanced touch events for mobile
+  // Enhanced touch events for mobile with velocity detection
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault(); // Prevent text selection and scrolling issues
     setIsDragging(true);
     setDragStart(e.touches[0].clientX);
     setDragOffset(0);
+    setDragVelocity(0);
+    setLastDragTime(Date.now());
+    setLastDragOffset(0);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
     e.preventDefault(); // Prevent scrolling
+
+    const currentTime = Date.now();
     const offset = e.touches[0].clientX - dragStart;
-    setDragOffset(offset);
+
+    // Calculate velocity for smoother interactions
+    if (currentTime - lastDragTime > 0) {
+      const velocity = (offset - lastDragOffset) / (currentTime - lastDragTime);
+      setDragVelocity(velocity);
+    }
+
+    setDragOffset(offset * 1.3); // More responsive feel (30% amplification)
+    setLastDragTime(currentTime);
+    setLastDragOffset(offset);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (!isDragging) return;
     e.preventDefault();
-    
-    const threshold = 30; // Reduced threshold for mobile
-    if (Math.abs(dragOffset) > threshold) {
-      if (dragOffset > 0) {
-        goToNext(); // Drag right = go to next
+
+    const threshold = 15; // Lower threshold for better mobile sensitivity
+    const velocityThreshold = 0.5; // Velocity-based navigation
+
+    // Check both distance and velocity for natural feel
+    if (
+      Math.abs(dragOffset) > threshold ||
+      Math.abs(dragVelocity) > velocityThreshold
+    ) {
+      // Add haptic feedback for successful swipe
+      if ("vibrate" in navigator) {
+        navigator.vibrate(15); // Light haptic feedback for swipe
+      }
+
+      if (dragOffset > 0 || dragVelocity > 0) {
+        goToPrevious(); // Swipe right = go to previous (natural direction)
       } else {
-        goToPrevious(); // Drag left = go to previous
+        goToNext(); // Swipe left = go to next (natural direction)
       }
     }
-    
+
     setIsDragging(false);
     setDragStart(0);
     setDragOffset(0);
+    setDragVelocity(0);
+    setLastDragTime(0);
+    setLastDragOffset(0);
   };
 
   return (
@@ -251,25 +336,29 @@ export const Carousel: React.FC<CarouselProps> = ({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         sx={{
-          cursor: isDragging ? 'grabbing' : 'grab',
-          userSelect: 'none',
-          touchAction: 'pan-y', // Allow vertical scrolling but handle horizontal
+          cursor: isDragging ? "grabbing" : "grab",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          touchAction: "pan-y", // Allow vertical scrolling but handle horizontal
+          WebkitTouchCallout: "none", // Disable iOS callout
+          WebkitTapHighlightColor: "transparent", // Remove tap highlight
           // Responsive width for mobile
-          '@media (max-width: 800px)': {
-            width: '100%',
-            maxWidth: '100vw',
+          "@media (max-width: 800px)": {
+            width: "100%",
+            maxWidth: "100vw",
           },
         }}
       >
-        <CarouselTrack translateX={translateX + dragOffset}>
+        <CarouselTrack
+          translateX={translateX + dragOffset}
+          isDragging={isDragging}
+        >
           {Array.from({ length: images.length * 3 }, (_, index) => {
             const imageIndex = index % images.length;
             const image = images[imageIndex];
-            
+
             return (
-              <ImageCard 
-                key={`${image}-${index}`}
-              >
+              <ImageCard key={`${image}-${index}`}>
                 <img
                   src={image}
                   alt={`Sofia Fashions Collection - Image ${imageIndex + 1}`}
@@ -292,10 +381,18 @@ export const Carousel: React.FC<CarouselProps> = ({
         </CarouselTrack>
 
         {/* Navigation Buttons */}
-        <LeftButton onClick={goToPrevious} aria-label="Previous image">
+        <LeftButton
+          onClick={handlePreviousClick}
+          onTouchEnd={handlePreviousClick}
+          aria-label="Previous image"
+        >
           <FaChevronLeft size={16} />
         </LeftButton>
-        <RightButton onClick={goToNext} aria-label="Next image">
+        <RightButton
+          onClick={handleNextClick}
+          onTouchEnd={handleNextClick}
+          aria-label="Next image"
+        >
           <FaChevronRight size={16} />
         </RightButton>
       </CarouselContainer>
