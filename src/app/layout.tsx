@@ -182,13 +182,28 @@ export default function RootLayout({
 
         {/* Web App Manifest */}
         <link rel="manifest" href="/manifest.json" />
-        
+
         {/* Aggressive favicon links for desktop browser compatibility */}
         <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=3" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=3" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.ico?v=3" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon.ico?v=3"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon.ico?v=3"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="48x48"
+          href="/favicon.ico?v=3"
+        />
         <link
           rel="icon"
           href="/icon-192.png?v=3"
@@ -201,7 +216,11 @@ export default function RootLayout({
           type="image/png"
           sizes="512x512"
         />
-        <link rel="apple-touch-icon" href="/images/logo.png?v=3" sizes="180x180" />
+        <link
+          rel="apple-touch-icon"
+          href="/images/logo.png?v=3"
+          sizes="180x180"
+        />
 
         {/* Preload critical resources */}
         <link
