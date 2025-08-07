@@ -169,6 +169,14 @@ export default function RootLayout({
         {/* Preload critical resources */}
         <link rel="preload" href="/images/logo.png" as="image" type="image/png" />
         <link rel="preload" href="/videos/video-poster.mp4" as="video" type="video/mp4" />
+        
+        {/* Additional meta tags for better social sharing */}
+        <meta property="og:image" content="https://sofiafashions.com/images/shareimage.jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta name="twitter:image" content="https://sofiafashions.com/images/shareimage.jpeg" />
+        <meta name="twitter:image:alt" content="Sofia Fashions - Premium Women's Fashion Collection" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <GoogleAnalytics />

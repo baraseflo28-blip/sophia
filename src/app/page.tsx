@@ -84,7 +84,7 @@ export default function Home() {
     <>
       <SEOStructuredData />
       <BackgroundVideo />
-      <SocialSharing />
+      {/* <SocialSharing /> */}
       <Box
         sx={{
           minHeight: "100vh",

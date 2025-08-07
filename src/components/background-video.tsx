@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -37,9 +37,36 @@ export const BackgroundVideo: React.FC<BackgroundVideoProps> = ({
   src = "/videos/video-poster.mp4",
   poster,
 }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      // Loop video every 10 seconds
+      if (video.currentTime >= 10) {
+        video.currentTime = 0;
+      }
+    };
+
+    video.addEventListener('timeupdate', handleTimeUpdate);
+
+    return () => {
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+    };
+  }, []);
+
   return (
     <VideoContainer>
-      <StyledVideo autoPlay muted loop playsInline poster={poster}>
+      <StyledVideo 
+        ref={videoRef}
+        autoPlay 
+        muted 
+        loop 
+        playsInline 
+        poster={poster}
+      >
         <source src={src} type="video/mp4" />
       </StyledVideo>
       <VideoOverlay />

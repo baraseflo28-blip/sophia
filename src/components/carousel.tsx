@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -110,6 +110,10 @@ export const Carousel: React.FC<CarouselProps> = ({
   ],
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0); // Start from beginning
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Create infinite array for endless scrolling - need more copies to avoid gaps
   const infiniteImages = [
@@ -153,15 +157,96 @@ export const Carousel: React.FC<CarouselProps> = ({
     setCurrentIndex(index);
   };
 
+  // Drag functionality
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart(e.clientX);
+    setDragOffset(0);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const offset = e.clientX - dragStart;
+    setDragOffset(offset);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    
+    const threshold = 50; // Minimum drag distance to trigger slide change
+    if (Math.abs(dragOffset) > threshold) {
+      if (dragOffset > 0) {
+        goToPrevious();
+      } else {
+        goToNext();
+      }
+    }
+    
+    setIsDragging(false);
+    setDragStart(0);
+    setDragOffset(0);
+  };
+
+  // Touch events for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setDragStart(e.touches[0].clientX);
+    setDragOffset(0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const offset = e.touches[0].clientX - dragStart;
+    setDragOffset(offset);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    
+    const threshold = 50;
+    if (Math.abs(dragOffset) > threshold) {
+      if (dragOffset > 0) {
+        goToPrevious();
+      } else {
+        goToNext();
+      }
+    }
+    
+    setIsDragging(false);
+    setDragStart(0);
+    setDragOffset(0);
+  };
+
   return (
     <CarouselWrapper>
-      <CarouselContainer>
-        <CarouselTrack translateX={translateX}>
+      <CarouselContainer
+        ref={containerRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        sx={{
+          cursor: isDragging ? 'grabbing' : 'grab',
+          userSelect: 'none',
+        }}
+      >
+        <CarouselTrack translateX={translateX + dragOffset}>
           {Array.from({ length: 15 }, (_, index) => {
             const imageIndex = index % images.length;
             const image = images[imageIndex];
+            const isFirstImage = imageIndex === 0;
+            const isLastImage = imageIndex === images.length - 1;
+            
             return (
-              <ImageCard key={`${image}-${index}`}>
+              <ImageCard 
+                key={`${image}-${index}`}
+                sx={{
+                  borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
+                }}
+              >
                 <img
                   src={image}
                   alt={`Sofia Fashions Collection - Image ${imageIndex + 1}`}
@@ -169,6 +254,7 @@ export const Carousel: React.FC<CarouselProps> = ({
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
+                    borderRadius: (isFirstImage || isLastImage) ? "50% 16px 16px 50%" : "16px",
                   }}
                 />
               </ImageCard>
